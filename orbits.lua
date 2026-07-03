@@ -2,10 +2,6 @@ local orbits = {}
 
 orbits.distances = { 20, 40, 60, 80 }
 
-function orbits.draw(sat)
-    gfx.rect_fill(sat.x, sat.y, Satellite.SIZE, Satellite.SIZE, gfx.COLOR_ORANGE)
-end
-
 function orbits.closest(x, y)
     local cx = usagi.GAME_W / 2
     local cy = usagi.GAME_H / 2

@@ -7,7 +7,6 @@ end
 
 function Gameplay.close(state)
     state.particles = {}
-    state.sats = {}
 end
 
 function Gameplay.update(dt, state)

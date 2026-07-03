@@ -11,7 +11,7 @@ Orbits = require("orbits")
 function _config()
     -- @type Usagi.Config
     return {
-        name = "Usagi Moon",
+        name = "Moon Defense",
         game_id = "com.usagiengine.CHANGEME",
     }
 end
