@@ -62,13 +62,4 @@ function satellite.draw(sat)
     gfx.spr_ex(Spr.SAT1, sat.x, sat.y, false, false, sat.rotation, 0, 1.0)
 end
 
-function satellite.get_pos(sat)
-    local cx = usagi.GAME_W / 2
-    local cy = usagi.GAME_H / 2
-    local radius = Orbits.distances[sat.orbit]
-    local x = cx - (radius * math.cos(sat.angle))
-    local y = cy - (radius * math.sin(sat.angle))
-    return x, y
-end
-
 return satellite

@@ -16,18 +16,40 @@ function bullet.new(x, y, xvel, yvel, rotation, sprite, owner)
     }
 end
 
-function bullet.update(dt, b)
+function bullet.update(dt, b, state)
     b.x += b.xvel * dt * bullet.SPEED
     b.y += b.yvel * dt * bullet.SPEED
     b.lifetime += dt
 
-    if b.x == 0 and b.y == 0 then
-        ParticleManager.explosion(b.x, b.y)
-        sfx.play(Sfx.EXPLOSION)
-        b.dead = true
-    end
+    local pos = { x = b.x + HALF_SIZE, y = b.y + HALF_SIZE }
 
-    if not util.point_in_rect({ x = b.x, y = b.y }, { x = 0, y = 0, w = usagi.GAME_W, h = usagi.GAME_H }) then
+    if util.point_in_rect(pos, { x = 0, y = 0, w = usagi.GAME_W, h = usagi.GAME_H }) then
+        if b.owner == PLAYER then
+            for _, e in ipairs(state.enemies) do
+                if util.point_in_rect(pos, { x = e.x, y = e.y, w = SIZE, h = SIZE }) then
+                    ParticleManager.explosion(pos.x, pos.y)
+                    sfx.play(Sfx.EXPLOSION)
+                    b.dead = true
+                    e.dead = true
+                end
+            end
+        else
+            if util.point_in_circ(pos, { x = CENTER_X, y = CENTER_Y, r = 1 }) then
+                ParticleManager.explosion(pos.x, pos.y)
+                sfx.play(Sfx.EXPLOSION)
+                b.dead = true
+            else
+                for _, s in ipairs(state.sats) do
+                    if util.point_in_rect(pos, { x = s.x, y = s.y, w = SIZE, h = SIZE }) then
+                        ParticleManager.explosion(b.x, b.y)
+                        sfx.play(Sfx.EXPLOSION)
+                        b.dead = true
+                        s.dead = true
+                    end
+                end
+            end
+        end
+    else
         if b.lifetime > 20 then
             b.dead = true
         end

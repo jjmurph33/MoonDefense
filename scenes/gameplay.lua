@@ -17,15 +17,6 @@ function Gameplay.update(dt, state)
     if input.mouse_pressed(input.MOUSE_LEFT) then
         local mx, my = input.mouse()
         local any_hit = false
-        for _, sat in ipairs(state.sats) do
-            local x, y = Satellite.get_pos(sat)
-            if util.point_in_circ({ x = mx, y = my }, { x = x, y = y, r = HALF_SIZE }) then
-                ParticleManager.explosion(x, y)
-                sfx.play(Sfx.EXPLOSION)
-                sat.dead = true
-                any_hit = true
-            end
-        end
         if not any_hit then
             local orbit = Orbits.closest(mx, my)
             if orbit == 1 then
@@ -40,8 +31,7 @@ function Gameplay.update(dt, state)
 
     if input.pressed(input.BTN1) then
         for _, sat in ipairs(state.sats) do
-            local x, y = Satellite.get_pos(sat)
-            ParticleManager.explosion(x, y)
+            ParticleManager.explosion(sat.x + HALF_SIZE, sat.y + HALF_SIZE)
             sfx.play(Sfx.EXPLOSION)
             sat.dead = true
         end
@@ -80,7 +70,7 @@ function Gameplay.update(dt, state)
         end
     end
     for _, b in ipairs(state.bullets) do
-        Bullet.update(dt, b)
+        Bullet.update(dt, b, state)
     end
 
     -- Enemies
@@ -97,7 +87,7 @@ function Gameplay.update(dt, state)
             living_enemies += 1
         end
     end
-    if living_enemies < 1 then
+    if living_enemies < 5 then
         local new_enemy = Enemy.new()
         table.insert(state.enemies, new_enemy)
     end
@@ -107,16 +97,18 @@ function Gameplay.draw(state)
     local mx, my = input.mouse()
     local closest_orbit = Orbits.closest(mx, my)
 
-    gfx.circ_fill(CENTER_X, CENTER_Y, Orbits.distances[1], gfx.COLOR_DARK_GRAY)
+    gfx.sspr(0, 48, 32, 32, CENTER_X - SIZE, CENTER_Y - SIZE)
 
     ParticleManager.draw()
 
     for i, radius in ipairs(Orbits.distances) do
-        local color = gfx.COLOR_BLUE
-        if i == closest_orbit then
-            color = gfx.COLOR_GREEN
+        if i ~= 1 then
+            local color = gfx.COLOR_BLUE
+            if i == closest_orbit then
+                color = gfx.COLOR_GREEN
+            end
+            gfx.circ(CENTER_X, CENTER_Y, radius, color)
         end
-        gfx.circ(CENTER_X, CENTER_Y, radius, color)
     end
 
     for _, sat in ipairs(state.sats) do
