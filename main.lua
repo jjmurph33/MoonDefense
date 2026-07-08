@@ -9,11 +9,23 @@ Satellite = require("satellite")
 Orbits = require("orbits")
 Enemy = require("enemy")
 
+
+
+WINDOW_WIDTH = 640
+WINDOW_HEIGHT = 360
+CENTER_X = WINDOW_WIDTH / 2
+CENTER_Y = WINDOW_HEIGHT / 2
+SIZE = 16
+HALF_SIZE = SIZE / 2
+
+
 function _config()
     -- @type Usagi.Config
     return {
         name = "Moon Defense",
         game_id = "com.usagiengine.CHANGEME",
+        game_width = WINDOW_WIDTH,
+        game_height = WINDOW_HEIGHT,
     }
 end
 

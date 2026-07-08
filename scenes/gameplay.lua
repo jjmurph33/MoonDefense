@@ -18,7 +18,7 @@ function Gameplay.update(dt, state)
         local any_hit = false
         for _, sat in ipairs(state.sats) do
             local x, y = Satellite.get_pos(sat)
-            if util.point_in_circ({ x = mx, y = my }, { x = x, y = y, r = Satellite.SIZE }) then
+            if util.point_in_circ({ x = mx, y = my }, { x = x, y = y, r = HALF_SIZE }) then
                 ParticleManager.explosion(x, y)
                 sfx.play(Sfx.EXPLOSION)
                 sat.dead = true
@@ -68,7 +68,15 @@ function Gameplay.update(dt, state)
     end
 
     for _, sat in ipairs(state.sats) do
-        Satellite.update(dt, sat)
+        Satellite.update(dt, sat, state)
+    end
+
+
+    for i = #state.enemies, 1, -1 do
+        local e = state.enemies[i]
+        if e.dead then
+            table.remove(state.enemies, i)
+        end
     end
 
     local living_enemies = 0
@@ -78,9 +86,9 @@ function Gameplay.update(dt, state)
             living_enemies += 1
         end
     end
-    if living_enemies < 1 then
-        local new_enemy = Enemy.new(10,10)
-        table.insert(state.enemies,new_enemy)
+    if living_enemies < 5 then
+        local new_enemy = Enemy.new()
+        table.insert(state.enemies, new_enemy)
     end
 end
 
