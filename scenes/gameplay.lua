@@ -1,8 +1,9 @@
 local Gameplay = {}
 
 function Gameplay.init(state)
-    state.sats = {}
     state.particles = {}
+    state.sats = {}
+    state.enemies = {}
 end
 
 function Gameplay.close(state)
@@ -69,6 +70,18 @@ function Gameplay.update(dt, state)
     for _, sat in ipairs(state.sats) do
         Satellite.update(dt, sat)
     end
+
+    local living_enemies = 0
+    for _, e in ipairs(state.enemies) do
+        Enemy.update(dt, e)
+        if not e.dead then
+            living_enemies += 1
+        end
+    end
+    if living_enemies < 1 then
+        local new_enemy = Enemy.new(10,10)
+        table.insert(state.enemies,new_enemy)
+    end
 end
 
 function Gameplay.draw(state)
@@ -92,6 +105,10 @@ function Gameplay.draw(state)
 
     for _, sat in ipairs(state.sats) do
         Satellite.draw(sat)
+    end
+
+    for _, e in ipairs(state.enemies) do
+        Enemy.draw(e)
     end
 
     if usagi.IS_DEV and state.show_debug then

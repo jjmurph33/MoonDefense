@@ -23,7 +23,8 @@ function satellite.draw(sat)
     local radius = Orbits.distances[sat.orbit]
     local x = cx - (radius * math.cos(sat.angle))
     local y = cy - (radius * math.sin(sat.angle))
-    gfx.circ_fill(x, y, satellite.SIZE, gfx.COLOR_ORANGE)
+    --gfx.circ_fill(x, y, satellite.SIZE, gfx.COLOR_ORANGE)
+    gfx.spr_ex(Spr.SAT, x, y, false, false, 0, 0, 1.0)
 end
 
 function satellite.get_pos(sat)

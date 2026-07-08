@@ -7,6 +7,7 @@ ParticleManager = require("particle_manager")
 Metadata = usagi.read_json("metadata.json")
 Satellite = require("satellite")
 Orbits = require("orbits")
+Enemy = require("enemy")
 
 function _config()
     -- @type Usagi.Config

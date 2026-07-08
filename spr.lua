@@ -1,5 +1,6 @@
 local Spr = {}
 
-Spr.PLAYER = 420
+Spr.SAT = 947
+Spr.UFO = 995
 
 return Spr
