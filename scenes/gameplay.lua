@@ -5,6 +5,7 @@ function Gameplay.init(state)
     state.sats = {}
     state.enemies = {}
     state.bullets = {}
+    state.panel = Panel.new()
 end
 
 function Gameplay.close(state)
@@ -16,25 +17,22 @@ function Gameplay.update(dt, state)
 
     if input.mouse_pressed(input.MOUSE_LEFT) then
         local mx, my = input.mouse()
-        local any_hit = false
-        if not any_hit then
-            local orbit = Orbits.closest(mx, my)
-            if orbit == 1 then
-                -- clicked on moon
-            else
-                local new_sat = Satellite.new(orbit)
-                sfx.play(Sfx.CANCEL)
-                table.insert(state.sats, new_sat)
-            end
-        end
+        -- local any_hit = false
+        -- if not any_hit then
+        --     local orbit = Orbits.closest(mx, my)
+        --     if orbit == 1 then
+        --         -- clicked on moon
+        --     else
+        --         local new_sat = Satellite.new(orbit)
+        --         sfx.play(Sfx.CANCEL)
+        --         table.insert(state.sats, new_sat)
+        --     end
+        -- end
+        Panel.clicked(mx, my, state)
     end
 
     if input.pressed(input.BTN1) then
-        for _, sat in ipairs(state.sats) do
-            ParticleManager.explosion(sat.x + HALF_SIZE, sat.y + HALF_SIZE)
-            sfx.play(Sfx.EXPLOSION)
-            sat.dead = true
-        end
+
     end
 
     if input.pressed(input.BTN2) then
@@ -87,7 +85,7 @@ function Gameplay.update(dt, state)
             living_enemies += 1
         end
     end
-    if living_enemies < 5 then
+    if living_enemies < 1 then
         local new_enemy = Enemy.new()
         table.insert(state.enemies, new_enemy)
     end
@@ -102,13 +100,7 @@ function Gameplay.draw(state)
     ParticleManager.draw()
 
     for i, radius in ipairs(Orbits.distances) do
-        if i ~= 1 then
-            local color = gfx.COLOR_BLUE
-            if i == closest_orbit then
-                color = gfx.COLOR_GREEN
-            end
-            gfx.circ(CENTER_X, CENTER_Y, radius, color)
-        end
+        gfx.circ(CENTER_X, CENTER_Y, radius, gfx.COLOR_BLUE)
     end
 
     for _, sat in ipairs(state.sats) do
@@ -122,6 +114,8 @@ function Gameplay.draw(state)
     for _, e in ipairs(state.enemies) do
         Enemy.draw(e)
     end
+
+    Panel.draw(state.panel)
 
     if usagi.IS_DEV and state.show_debug then
         gfx.text("sats: " .. #State.sats, UI.padding, usagi.GAME_H - 18, gfx.COLOR_WHITE)

@@ -1,11 +1,15 @@
 local Spr = {}
 
-Spr.SAT1 = 2
+Spr.SAT_SHIELD = 3
+Spr.SAT_TURRET = 2
+Spr.SAT_MISSLE = 4
+
 Spr.SHIP1 = 11
 Spr.SHIP2 = 12
 Spr.SHIP3 = 13
 
 Spr.BULLET_BLUE = 21
 Spr.BULLET_RED = 22
+Spr.MISSILE_BLUE = 23
 
 return Spr

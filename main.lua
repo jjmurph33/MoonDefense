@@ -9,15 +9,15 @@ Satellite = require("satellite")
 Orbits = require("orbits")
 Enemy = require("enemy")
 Bullet = require("bullet")
-
-
+Panel = require("panel")
 
 WINDOW_WIDTH = 640
 WINDOW_HEIGHT = 360
-CENTER_X = WINDOW_WIDTH / 2
-CENTER_Y = WINDOW_HEIGHT / 2
+WIDTH = WINDOW_WIDTH - (WINDOW_WIDTH / 4)
+HEIGHT = WINDOW_HEIGHT
+CENTER_X = WIDTH / 2
+CENTER_Y = HEIGHT / 2
 SIZE = 16
-HALF_SIZE = SIZE / 2
 PLAYER = 0
 ENEMY = 1
 
@@ -25,7 +25,7 @@ function _config()
     -- @type Usagi.Config
     return {
         name = "Moon Defense",
-        game_id = "com.usagiengine.CHANGEME",
+        icon = 1,
         game_width = WINDOW_WIDTH,
         game_height = WINDOW_HEIGHT,
     }
@@ -61,7 +61,5 @@ end
 
 function _draw(_dt)
     gfx.clear(gfx.COLOR_BLACK)
-    --if not State.paused then
     Scene.draw(State)
-    --end
 end

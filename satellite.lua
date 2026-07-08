@@ -2,12 +2,13 @@ local satellite = {}
 
 satellite.FIRE_RATE = 2 -- seconds between shots
 
-function satellite.new(orbit)
+function satellite.new(orbit, sprite)
     return {
         x = 0,
         y = 0,
         rotation = 0,
         dead = false,
+        sprite = sprite,
         orbit = orbit,
         angle = math.random(0, 6),
         fire_timer = 0,
@@ -21,9 +22,23 @@ function satellite.update(dt, sat, state)
     end
 
     local radius = Orbits.distances[sat.orbit]
-    sat.x = CENTER_X - (radius * math.cos(sat.angle)) - HALF_SIZE
-    sat.y = CENTER_Y - (radius * math.sin(sat.angle)) - HALF_SIZE
+    sat.x = CENTER_X - (radius * math.cos(sat.angle)) - SIZE / 2
+    sat.y = CENTER_Y - (radius * math.sin(sat.angle)) - SIZE / 2
 
+    if sat.sprite == Spr.SAT_SHIELD then
+
+    elseif sat.sprite == Spr.SAT_TURRET then
+        Satellite.update_shield(dt, sat, state)
+    elseif sat.sprite == Spr.SAT_MISSLE then
+
+    end
+end
+
+function satellite.draw(sat)
+    gfx.spr_ex(sat.sprite, sat.x, sat.y, false, false, sat.rotation, 0, 1.0)
+end
+
+function satellite.update_shield(dt, sat, state)
     local closest_distance = 50000
     local closest_index = 0
     for i, e in ipairs(state.enemies) do
@@ -41,7 +56,11 @@ function satellite.update(dt, sat, state)
         local dx = enemy.x - sat.x
         local dy = enemy.y - sat.y
         local v = util.vec_normalize { x = dx, y = dy }
-        sat.rotation = math.atan(v.y, v.x) + math.pi / 2
+        sat.rotation = math.atan(v.y, v.x)
+
+        if sat.sprite == Spr.SAT_TURRET then
+            sat.rotation += math.pi / 2
+        end
 
         if sat.fire_timer > 0 then
             sat.fire_timer -= dt
@@ -56,10 +75,6 @@ function satellite.update(dt, sat, state)
     if sat.rotation > math.pi * 2 then
         sat.rotation = 0
     end
-end
-
-function satellite.draw(sat)
-    gfx.spr_ex(Spr.SAT1, sat.x, sat.y, false, false, sat.rotation, 0, 1.0)
 end
 
 return satellite

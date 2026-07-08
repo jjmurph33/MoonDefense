@@ -21,7 +21,7 @@ function bullet.update(dt, b, state)
     b.y += b.yvel * dt * bullet.SPEED
     b.lifetime += dt
 
-    local pos = { x = b.x + HALF_SIZE, y = b.y + HALF_SIZE }
+    local pos = { x = b.x + SIZE / 2, y = b.y + SIZE / 2 }
 
     if util.point_in_rect(pos, { x = 0, y = 0, w = usagi.GAME_W, h = usagi.GAME_H }) then
         if b.owner == PLAYER then
