@@ -1,5 +1,7 @@
 local satellite = {}
 
+satellite.FIRE_RATE = 2 -- seconds between shots
+
 function satellite.new(orbit)
     return {
         x = 0,
@@ -8,6 +10,7 @@ function satellite.new(orbit)
         dead = false,
         orbit = orbit,
         angle = math.random(0, 6),
+        fire_timer = 0,
     }
 end
 
@@ -21,12 +24,11 @@ function satellite.update(dt, sat, state)
     sat.x = CENTER_X - (radius * math.cos(sat.angle)) - HALF_SIZE
     sat.y = CENTER_Y - (radius * math.sin(sat.angle)) - HALF_SIZE
 
-    local closest_distance = math.huge
+    local closest_distance = 50000
     local closest_index = 0
     for i, e in ipairs(state.enemies) do
         if not e.dead then
             local distance = util.vec_dist_sq({ x = sat.x, y = sat.y }, { x = e.x, y = e.y })
-
             if distance < closest_distance then
                 closest_index = i
                 closest_distance = distance
@@ -40,6 +42,14 @@ function satellite.update(dt, sat, state)
         local dy = enemy.y - sat.y
         local v = util.vec_normalize { x = dx, y = dy }
         sat.rotation = math.atan(v.y, v.x) + math.pi / 2
+
+        if sat.fire_timer > 0 then
+            sat.fire_timer -= dt
+        else
+            local bullet = Bullet.new(sat.x, sat.y, v.x, v.y, sat.rotation, Spr.BULLET_BLUE, PLAYER)
+            table.insert(state.bullets, bullet)
+            sat.fire_timer = satellite.FIRE_RATE
+        end
     else
         sat.rotation += 0.5 * dt
     end

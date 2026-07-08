@@ -4,6 +4,7 @@ function Gameplay.init(state)
     state.particles = {}
     state.sats = {}
     state.enemies = {}
+    state.bullets = {}
 end
 
 function Gameplay.close(state)
@@ -60,33 +61,43 @@ function Gameplay.update(dt, state)
         end
     end
 
+    -- Satellites
     for i = #state.sats, 1, -1 do
         local sat = state.sats[i]
         if sat.dead then
             table.remove(state.sats, i)
         end
     end
-
     for _, sat in ipairs(state.sats) do
         Satellite.update(dt, sat, state)
     end
 
+    -- Bullets
+    for i = #state.bullets, 1, -1 do
+        local b = state.bullets[i]
+        if b.dead then
+            table.remove(state.bullets, i)
+        end
+    end
+    for _, b in ipairs(state.bullets) do
+        Bullet.update(dt, b)
+    end
 
+    -- Enemies
     for i = #state.enemies, 1, -1 do
         local e = state.enemies[i]
         if e.dead then
             table.remove(state.enemies, i)
         end
     end
-
     local living_enemies = 0
     for _, e in ipairs(state.enemies) do
-        Enemy.update(dt, e)
+        Enemy.update(dt, e, state)
         if not e.dead then
             living_enemies += 1
         end
     end
-    if living_enemies < 5 then
+    if living_enemies < 1 then
         local new_enemy = Enemy.new()
         table.insert(state.enemies, new_enemy)
     end
@@ -94,12 +105,9 @@ end
 
 function Gameplay.draw(state)
     local mx, my = input.mouse()
-    local cx = usagi.GAME_W / 2
-    local cy = usagi.GAME_H / 2
-
     local closest_orbit = Orbits.closest(mx, my)
 
-    gfx.circ_fill(cx, cy, Orbits.distances[1], gfx.COLOR_DARK_GRAY)
+    gfx.circ_fill(CENTER_X, CENTER_Y, Orbits.distances[1], gfx.COLOR_DARK_GRAY)
 
     ParticleManager.draw()
 
@@ -108,11 +116,15 @@ function Gameplay.draw(state)
         if i == closest_orbit then
             color = gfx.COLOR_GREEN
         end
-        gfx.circ(cx, cy, radius, color)
+        gfx.circ(CENTER_X, CENTER_Y, radius, color)
     end
 
     for _, sat in ipairs(state.sats) do
         Satellite.draw(sat)
+    end
+
+    for _, b in ipairs(state.bullets) do
+        Bullet.draw(b)
     end
 
     for _, e in ipairs(state.enemies) do

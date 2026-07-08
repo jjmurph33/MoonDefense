@@ -8,6 +8,7 @@ Metadata = usagi.read_json("metadata.json")
 Satellite = require("satellite")
 Orbits = require("orbits")
 Enemy = require("enemy")
+Bullet = require("bullet")
 
 
 
@@ -17,7 +18,8 @@ CENTER_X = WINDOW_WIDTH / 2
 CENTER_Y = WINDOW_HEIGHT / 2
 SIZE = 16
 HALF_SIZE = SIZE / 2
-
+PLAYER = 0
+ENEMY = 1
 
 function _config()
     -- @type Usagi.Config
@@ -59,7 +61,7 @@ end
 
 function _draw(_dt)
     gfx.clear(gfx.COLOR_BLACK)
-    if not State.paused then
-        Scene.draw(State)
-    end
+    --if not State.paused then
+    Scene.draw(State)
+    --end
 end
