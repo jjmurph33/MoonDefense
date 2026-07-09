@@ -4,12 +4,14 @@ Scene.MAIN_MENU = "main_menu"
 Scene.GAMEPLAY = "gameplay"
 Scene.PLAYGROUND = "playground"
 Scene.CREDITS = "credits"
+Scene.GAMEOVER = "gameover"
 
 local scenes = {
   [Scene.MAIN_MENU] = require("scenes.main_menu"),
   [Scene.GAMEPLAY] = require("scenes.gameplay"),
   [Scene.PLAYGROUND] = require("scenes.playground"),
   [Scene.CREDITS] = require("scenes.credits"),
+  [Scene.GAMEOVER] = require("scenes.gameover"),
 }
 
 function Scene.switch_to(state, key)

@@ -5,6 +5,10 @@ function Gameplay.init(state)
 	state.sats = {}
 	state.enemies = {}
 	state.bullets = {}
+	state.score = 0
+	state.lifetime = 0
+	state.health = 10
+	state.spawn_timer = 0
 	state.panel = Panel.new()
 	state.sat_counts = {}
 	state.sat_counts[Spr.SAT_SHIELD]=0
@@ -17,6 +21,8 @@ function Gameplay.close(state)
 end
 
 function Gameplay.update(dt, state)
+    state.lifetime += dt
+
 	ParticleManager.update(dt)
 
 	if input.mouse_pressed(input.MOUSE_LEFT) then
@@ -78,48 +84,71 @@ function Gameplay.update(dt, state)
 			living_enemies += 1
 		end
 	end
-	if living_enemies < 1 then
-		local new_enemy = Enemy.new()
-		table.insert(state.enemies, new_enemy)
+
+	if state.lifetime - state.spawn_timer > 1 then
+	    state.spawn_timer = state.lifetime
+        table.insert(state.enemies, Enemy.new())
+	end
+
+	if state.health <= 0 then
+	    print("game over")
+		effect.flash(0.5, gfx.COLOR_RED)
+		effect.screen_shake(0.5, 2)
+		Scene.switch_to(state, Scene.GAMEOVER)
 	end
 end
 
 function Gameplay.draw(state)
-	ParticleManager.draw()
-
-	for i, radius in ipairs(Orbits.distances) do
-		gfx.circ(CENTER_X, CENTER_Y, radius, gfx.COLOR_BLUE)
-	end
-
-	local has_shield = false
-	for _, sat in ipairs(state.sats) do
-		Satellite.draw(sat)
-		if sat.sprite == Spr.SAT_SHIELD and not sat.dead then
-			has_shield = true
-		end
-	end
+	-- for i, radius in ipairs(Orbits.distances) do
+	-- 	gfx.circ(CENTER_X, CENTER_Y, radius, gfx.COLOR_BLUE)
+	-- end
 
 	-- draw the moon
 	gfx.sspr(0, 48, 32, 32, CENTER_X - SIZE, CENTER_Y - SIZE)
 
-	if has_shield then
+	if state.sat_counts[Spr.SAT_SHIELD] > 0 then
 		-- draw shield around the moon
 		gfx.sspr_ex(32, 48, 32, 32, CENTER_X - SIZE, CENTER_Y - SIZE, SIZE * 2, SIZE * 2, false, false, 0, 0, 0.5)
 	end
 
-	for _, b in ipairs(state.bullets) do
-		Bullet.draw(b)
+	-- draw moon's health bar
+	local x = CENTER_X - SIZE + 2
+	local w = SIZE*2 - 5
+	local h = 2
+	local y = CENTER_Y - SIZE - 1 - h
+	local color = gfx.COLOR_WHITE
+	gfx.rect_fill(x,y,w,h,color)
+	if state.health == 100 then
+		color = gfx.COLOR_GREEN
+	else
+	    color = gfx.COLOR_RED
+		local ratio = 100 / state.health
+		w /= ratio
+	end
+	gfx.rect_fill(x,y,w,h,color)
+
+	-- draw the satellites
+	for _, sat in ipairs(state.sats) do
+		Satellite.draw(sat)
 	end
 
+	-- draw the enemy ships
 	for _, e in ipairs(state.enemies) do
 		Enemy.draw(e)
 	end
 
+	-- draw the bullets and missiles
+	for _, b in ipairs(state.bullets) do
+		Bullet.draw(b)
+	end
+
+	ParticleManager.draw()
+
 	Panel.draw(state.panel)
 
-	if usagi.IS_DEV and state.show_debug then
-		gfx.text("sats: " .. #State.sats, UI.padding, usagi.GAME_H - 18, gfx.COLOR_WHITE)
-	end
+	-- if usagi.IS_DEV and state.show_debug then
+	-- 	gfx.text("sats: " .. #State.sats, UI.padding, usagi.GAME_H - 18, gfx.COLOR_WHITE)
+	-- end
 end
 
 return Gameplay

@@ -1,8 +1,13 @@
 local bullet = {}
 
 bullet.SPEED = 100
+bullet.DAMAGE = 5
 
 function bullet.new(x, y, xvel, yvel, rotation, sprite, owner)
+    local damage = bullet.DAMAGE
+    if sprite == Spr.MISSILE_BLUE or sprite == Spr.MISSILE_RED then
+        damage *= 2
+    end
     return {
         x = x,
         y = y,
@@ -13,6 +18,7 @@ function bullet.new(x, y, xvel, yvel, rotation, sprite, owner)
         dead = false,
         lifetime = 0,
         owner = owner,
+        damage = damage,
     }
 end
 
@@ -27,27 +33,25 @@ function bullet.update(dt, b, state)
         if b.owner == PLAYER then
             for _, e in ipairs(state.enemies) do
                 if util.point_in_rect(pos, { x = e.x, y = e.y, w = SIZE, h = SIZE }) then
-                    -- hit an enemy ship
-                    ParticleManager.explosion(pos.x, pos.y)
-                    sfx.play(Sfx.EXPLOSION)
-                    b.dead = true
-                    e.dead = true
+                    Enemy.hit(e,b.damage)
                 end
             end
         else
             if util.point_in_circ(pos, { x = CENTER_X, y = CENTER_Y, r = 1 }) then
                 -- hit the moon
-                ParticleManager.explosion(pos.x, pos.y)
-                sfx.play(Sfx.EXPLOSION)
+                if state.sat_counts[Spr.SAT_SHIELD] == 0 then
+                    sfx.play(Sfx.EXPLOSION)
+                    state.health -= b.damage
+                else
+                    -- moon is shielded
+                    sfx.play(Sfx.SHIELD_HIT)
+                end
+                ParticleManager.explosion(pos.x, pos.y,1)
                 b.dead = true
             else
                 for _, s in ipairs(state.sats) do
                     if util.point_in_rect(pos, { x = s.x, y = s.y, w = SIZE, h = SIZE }) then
-                        -- hit a satellite
-                        ParticleManager.explosion(b.x, b.y)
-                        sfx.play(Sfx.EXPLOSION)
-                        b.dead = true
-                        s.dead = true
+                        Satellite.hit(s,b.damage)
                     end
                 end
             end

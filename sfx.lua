@@ -4,6 +4,8 @@ Sfx.CONFIRM = "confirm"
 Sfx.CANCEL = "cancel"
 Sfx.EXPLOSION = "explosion"
 Sfx.BUILD = "build"
+Sfx.SHIELD_HIT = "hitHurt"
+Sfx.DESTROY = "destroy"
 
 function Sfx.play_rand_pitch(name, vol)
     vol = vol or 1.0

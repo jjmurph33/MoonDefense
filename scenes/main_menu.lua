@@ -51,24 +51,24 @@ function MainMenu.update(dt, state)
 end
 
 function MainMenu.draw(state)
-    gfx.clear(gfx.COLOR_WHITE)
-    gfx.text("YOUR GAME", UI.padding, UI.padding, gfx.COLOR_BLACK)
+    gfx.clear(gfx.COLOR_BLACK)
+    gfx.text("Moon Defense", UI.padding, UI.padding, gfx.COLOR_DARK_GREEN)
 
     gfx.text("Confirm: " .. input.mapping_for(input.BTN1) .. "", UI.padding, usagi.GAME_H - UI.padding * 3,
-        gfx.COLOR_BLACK)
+        gfx.COLOR_DARK_GREEN)
 
     for i, opt in ipairs(options) do
         local y = 60 + i * 16
         if i == state.current_option then
-            gfx.circ_fill(UI.padding * 2 + 4 + math.cos(usagi.elapsed * 8), y + 7, 3, gfx.COLOR_BLACK)
+            gfx.circ_fill(UI.padding * 2 + 4 + math.cos(usagi.elapsed * 8), y + 7, 3, gfx.COLOR_DARK_GREEN)
         end
-        gfx.text(opt, UI.padding * 4, y, gfx.COLOR_BLACK)
+        gfx.text(opt, UI.padding * 4, y, gfx.COLOR_DARK_GREEN)
     end
 
     local ver = Metadata.version
     local ver_w, ver_h = usagi.measure_text(ver)
     gfx.text(ver, usagi.GAME_W - ver_w - UI.padding,
-        usagi.GAME_H - ver_h - UI.padding, gfx.COLOR_BLACK)
+        usagi.GAME_H - ver_h - UI.padding, gfx.COLOR_DARK_GREEN)
 end
 
 return MainMenu

@@ -1,6 +1,7 @@
 local satellite = {}
 
 satellite.FIRE_RATE = 2 -- seconds between shots
+satellite.MAX_HEALTH = 10
 
 function satellite.new(sprite)
 	local orbit = 0
@@ -20,6 +21,7 @@ function satellite.new(sprite)
 		orbit = orbit,
 		angle = math.random(0, 6),
 		fire_timer = 0,
+		health = 10
 	}
 end
 
@@ -115,9 +117,24 @@ end
 function satellite.draw(sat)
 	gfx.spr_ex(sat.sprite, sat.x, sat.y, false, false, sat.rotation, 0, 1.0)
 
+	local x = sat.x+1
+	local w = SIZE-1
+	local h = 2
+	local y = sat.y-1-h
+	local color = gfx.COLOR_WHITE
+	gfx.rect_fill(x,y,w,h,color)
+	if sat.health == satellite.MAX_HEALTH then
+		color = gfx.COLOR_GREEN
+	else
+	    color = gfx.COLOR_RED
+		local ratio = satellite.MAX_HEALTH / sat.health
+		w /= ratio
+	end
+	gfx.rect_fill(x,y,w,h,color)
+
 	if sat.sprite == Spr.SAT_SHIELD then
-		local x = sat.x + SIZE / 2
-		local y = sat.y + SIZE / 2
+		x = sat.x + SIZE / 2
+		y = sat.y + SIZE / 2
 		local dx = CENTER_X - x
 		local dy = CENTER_Y - y
 		local v = util.vec_normalize({ x = dx, y = dy })
@@ -126,6 +143,18 @@ function satellite.draw(sat)
 		y -= SIZE / 2 - (SIZE * v.y)
 		gfx.spr_ex(Spr.BEAM_SHIELD, x, y, false, false, rotation, 0, 0.75)
 	end
+end
+
+function satellite.hit(s,damage)
+    s.health -= damage
+    if s.health <= 0 then
+        ParticleManager.explosion(s.x, s.y)
+        sfx.play(Sfx.DESTROY)
+        s.dead = true
+    else
+        ParticleManager.explosion(s.x, s.y,1)
+        sfx.play(Sfx.EXPLOSION)
+    end
 end
 
 return satellite

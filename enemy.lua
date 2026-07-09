@@ -3,6 +3,7 @@ local enemy = {}
 enemy.SPEED = 50
 enemy.FIRE_RATE = 3 -- seconds between shots
 enemy.RANGE = 200
+enemy.MAX_HEALTH = 10
 
 function enemy.new()
 	local angle = math.random(0, 6)
@@ -20,6 +21,7 @@ function enemy.new()
 		lifetime = 0,
 		sprite = math.random(Spr.SHIP1, Spr.SHIP3),
 		fire_timer = 0,
+		health = enemy.MAX_HEALTH
 	}
 end
 
@@ -53,6 +55,32 @@ end
 
 function enemy.draw(e)
 	gfx.spr_ex(e.sprite, e.x, e.y, false, false, e.rotation, 0, 1.0)
+	local x = e.x+1
+	local w = SIZE-1
+	local h = 2
+	local y = e.y-1-h
+	local color = gfx.COLOR_WHITE
+	gfx.rect_fill(x,y,w,h,color)
+	if e.health == enemy.MAX_HEALTH then
+		color = gfx.COLOR_GREEN
+	else
+	    color = gfx.COLOR_RED
+		local ratio = enemy.MAX_HEALTH / e.health
+		w /= ratio
+	end
+	gfx.rect_fill(x,y,w,h,color)
+end
+
+function enemy.hit(e,damage)
+    e.health -= damage
+    if e.health <= 0 then
+        ParticleManager.explosion(e.x, e.y)
+        sfx.play(Sfx.DESTROY)
+        e.dead = true
+    else
+        ParticleManager.explosion(e.x, e.y,1)
+        sfx.play(Sfx.EXPLOSION)
+    end
 end
 
 return enemy
