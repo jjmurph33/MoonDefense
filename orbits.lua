@@ -1,6 +1,6 @@
 local orbits = {}
 
-orbits.distances = { 40, 60, 80, 100, 120 }
+orbits.distances = { 40, 80, 120 }
 
 function orbits.closest(x, y)
     local cx = usagi.GAME_W / 2

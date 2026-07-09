@@ -7,8 +7,8 @@ function Gameplay.init(state)
 	state.bullets = {}
 	state.score = 0
 	state.lifetime = 0
-	state.health = 10
-	state.spawn_timer = 0
+	state.health = 100
+	state.enemy_timer = 0
 	state.panel = Panel.new()
 	state.sat_counts = {}
 	state.sat_counts[Spr.SAT_SHIELD]=0
@@ -51,6 +51,10 @@ function Gameplay.update(dt, state)
 	for i = #state.sats, 1, -1 do
 		local sat = state.sats[i]
 		if sat.dead then
+			if state.panel.timers[sat.sprite] <= 0 then
+			    --state.panel.timers[sat.sprite] = Panel.TIMER_MAX * state.sat_counts[sat.sprite]
+				state.panel.timers[sat.sprite] = Panel.TIMER_MAX
+			end
 			table.remove(state.sats, i)
 			state.sat_counts[sat.sprite] -= 1
 		end
@@ -85,17 +89,18 @@ function Gameplay.update(dt, state)
 		end
 	end
 
-	if state.lifetime - state.spawn_timer > 1 then
-	    state.spawn_timer = state.lifetime
+	if state.lifetime - state.enemy_timer > 1 then
+	    state.enemy_timer = state.lifetime
         table.insert(state.enemies, Enemy.new())
 	end
 
 	if state.health <= 0 then
-	    print("game over")
-		effect.flash(0.5, gfx.COLOR_RED)
-		effect.screen_shake(0.5, 2)
+		effect.flash(1, gfx.COLOR_RED)
+		effect.screen_shake(1, 5)
 		Scene.switch_to(state, Scene.GAMEOVER)
 	end
+
+	Panel.update(dt,state.panel,state)
 end
 
 function Gameplay.draw(state)
@@ -144,7 +149,7 @@ function Gameplay.draw(state)
 
 	ParticleManager.draw()
 
-	Panel.draw(state.panel)
+	Panel.draw(state.panel,state)
 
 	-- if usagi.IS_DEV and state.show_debug then
 	-- 	gfx.text("sats: " .. #State.sats, UI.padding, usagi.GAME_H - 18, gfx.COLOR_WHITE)

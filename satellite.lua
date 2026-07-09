@@ -148,7 +148,7 @@ end
 function satellite.hit(s,damage)
     s.health -= damage
     if s.health <= 0 then
-        ParticleManager.explosion(s.x, s.y)
+        ParticleManager.explosion(s.x, s.y,5)
         sfx.play(Sfx.DESTROY)
         s.dead = true
     else

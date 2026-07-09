@@ -32,7 +32,7 @@ function _config()
 end
 
 function _init()
-    print("init: v" .. Metadata.version)
+    --print("init: v" .. Metadata.version)
     State = {
         show_debug = false,
         paused = false,
@@ -51,11 +51,11 @@ function _update(dt)
         Scene.update(dt, State)
     end
 
-    if usagi.IS_DEV then
-        if input.key_pressed(input.KEY_2) then
-            Scene.switch_to(State, Scene.PLAYGROUND)
-        end
-    end
+    -- if usagi.IS_DEV then
+    --     if input.key_pressed(input.KEY_2) then
+    --         Scene.switch_to(State, Scene.PLAYGROUND)
+    --     end
+    -- end
 end
 
 function _draw(_dt)

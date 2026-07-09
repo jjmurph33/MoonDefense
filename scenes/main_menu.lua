@@ -60,7 +60,7 @@ function MainMenu.draw(state)
     for i, opt in ipairs(options) do
         local y = 60 + i * 16
         if i == state.current_option then
-            gfx.circ_fill(UI.padding * 2 + 4 + math.cos(usagi.elapsed * 8), y + 7, 3, gfx.COLOR_DARK_GREEN)
+            gfx.circ_fill(UI.padding * 2 + 4 + math.cos(usagi.elapsed * 8), y + 7, 3, gfx.COLOR_LIGHT_GRAY)
         end
         gfx.text(opt, UI.padding * 4, y, gfx.COLOR_DARK_GREEN)
     end
@@ -69,6 +69,16 @@ function MainMenu.draw(state)
     local ver_w, ver_h = usagi.measure_text(ver)
     gfx.text(ver, usagi.GAME_W - ver_w - UI.padding,
         usagi.GAME_H - ver_h - UI.padding, gfx.COLOR_DARK_GREEN)
+
+    local x = usagi.GAME_W - SIZE * 10
+    local y = CENTER_Y
+    local scale = 8
+    gfx.sspr_ex(0, 48, 32, 32, x, y,SIZE*scale,SIZE*scale,false, false, 0, 0, 1)
+
+	if state.sat_counts[Spr.SAT_SHIELD] > 0 then
+		-- draw shield around the moon
+		gfx.sspr_ex(32, 48, 32, 32, CENTER_X - SIZE, CENTER_Y - SIZE, SIZE * 2, SIZE * 2, false, false, 0, 0, 0.5)
+	end
 end
 
 return MainMenu
