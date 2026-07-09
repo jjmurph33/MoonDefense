@@ -38,7 +38,6 @@ function _init()
         paused = false,
         particles = {}
     }
-
     Scene.switch_to(State, Scene.GAMEPLAY)
 end
 

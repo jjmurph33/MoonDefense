@@ -56,17 +56,14 @@ end
 function panel.clicked(mx, my, state)
     for _, b in ipairs(state.panel.buttons) do
         if util.point_in_rect({ x = mx, y = my }, { x = b.x, y = b.y, w = b.w, h = b.h }) then
-            local orbit = 0
-            if b.sprite == Spr.SAT_SHIELD then
-                orbit = 1
-            elseif b.sprite == Spr.SAT_TURRET then
-                orbit = 2
-            elseif b.sprite == Spr.SAT_MISSLE then
-                orbit = 3
-            end
-            local new_sat = Satellite.new(orbit, b.sprite)
+            local new_sat = Satellite.new(b.sprite)
             sfx.play(Sfx.BUILD)
             table.insert(state.sats, new_sat)
+            if state.sat_counts[b.sprite] == nil then
+                state.sat_counts[b.sprite] = 1
+            else
+                state.sat_counts[b.sprite] += 1
+            end
         end
     end
 end
