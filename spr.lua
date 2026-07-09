@@ -10,6 +10,8 @@ Spr.SHIP3 = 13
 
 Spr.BULLET_BLUE = 21
 Spr.BULLET_RED = 22
-Spr.MISSILE_BLUE = 23
+Spr.MISSILE_BLUE = 26
+
+Spr.BEAM_SHIELD = 53
 
 return Spr

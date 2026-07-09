@@ -92,19 +92,26 @@ function Gameplay.update(dt, state)
 end
 
 function Gameplay.draw(state)
-    local mx, my = input.mouse()
-    local closest_orbit = Orbits.closest(mx, my)
-
-    gfx.sspr(0, 48, 32, 32, CENTER_X - SIZE, CENTER_Y - SIZE)
-
     ParticleManager.draw()
 
     for i, radius in ipairs(Orbits.distances) do
         gfx.circ(CENTER_X, CENTER_Y, radius, gfx.COLOR_BLUE)
     end
 
+    local has_shield = false
     for _, sat in ipairs(state.sats) do
         Satellite.draw(sat)
+        if sat.sprite == Spr.SAT_SHIELD and not sat.dead then
+            has_shield = true
+        end
+    end
+
+    -- draw the moon
+    gfx.sspr(0, 48, 32, 32, CENTER_X - SIZE, CENTER_Y - SIZE)
+
+    if has_shield then
+        -- draw shield around the moon
+        gfx.sspr_ex(32,48,32,32, CENTER_X - SIZE, CENTER_Y - SIZE,SIZE*2,SIZE*2,false,false,0,0,0.5)
     end
 
     for _, b in ipairs(state.bullets) do
