@@ -1,5 +1,17 @@
 local panel = {}
 
+local function max_sats(sprite)
+    if sprite == Spr.SAT_SHIELD then
+        return 1
+    elseif sprite == Spr.SAT_TURRET then
+        return 4
+    elseif sprite == Spr.SAT_MISSLE then
+        return 4
+    else
+        return 0
+    end
+end
+
 function panel.new()
     local x = WIDTH + 1
     local y = 1
@@ -37,8 +49,12 @@ function panel.draw(p)
     local icon_y = 8
     local text_x = 45
     local text_y = 5
+    local text_y2 = 22
 
     for _, b in ipairs(p.buttons) do
+        local count = State.sat_counts[b.sprite]
+       local max = max_sats(b.sprite)
+
         gfx.rect(b.x, b.y, b.w, b.h, gfx.COLOR_DARK_GREEN)
         if b.sprite == Spr.SAT_SHIELD then
             gfx.sspr_ex(32, 0, 16, 16, b.x + icon_x, b.y + icon_y, SIZE * 2, SIZE * 2, false, false, 0, 0, 1.0)
@@ -50,19 +66,17 @@ function panel.draw(p)
             gfx.sspr_ex(48, 0, 16, 16, b.x + icon_x, b.y + icon_y, SIZE * 2, SIZE * 2, false, false, 0, 0, 1.0)
             gfx.text("Missle Launcher", b.x + text_x, b.y + text_y, gfx.COLOR_DARK_GREEN)
         end
+        gfx.text(string.format("%d/%d",count,max), b.x + text_x, b.y + text_y2, gfx.COLOR_DARK_GREEN)
     end
 end
 
 function panel.clicked(mx, my, state)
     for _, b in ipairs(state.panel.buttons) do
         if util.point_in_rect({ x = mx, y = my }, { x = b.x, y = b.y, w = b.w, h = b.h }) then
-            local new_sat = Satellite.new(b.sprite)
-            sfx.play(Sfx.BUILD)
-            table.insert(state.sats, new_sat)
-            if state.sat_counts[b.sprite] == nil then
-                state.sat_counts[b.sprite] = 1
-            else
+            if state.sat_counts[b.sprite] < max_sats(b.sprite) then
+                table.insert(state.sats, Satellite.new(b.sprite))
                 state.sat_counts[b.sprite] += 1
+                sfx.play(Sfx.BUILD)
             end
         end
     end

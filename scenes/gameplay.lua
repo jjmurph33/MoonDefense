@@ -3,10 +3,13 @@ local Gameplay = {}
 function Gameplay.init(state)
 	state.particles = {}
 	state.sats = {}
-	state.sat_counts = {}
 	state.enemies = {}
 	state.bullets = {}
 	state.panel = Panel.new()
+	state.sat_counts = {}
+	state.sat_counts[Spr.SAT_SHIELD]=0
+	state.sat_counts[Spr.SAT_TURRET]=0
+	state.sat_counts[Spr.SAT_MISSLE]=0
 end
 
 function Gameplay.close(state)
