@@ -70,15 +70,11 @@ function MainMenu.draw(state)
     gfx.text(ver, usagi.GAME_W - ver_w - UI.padding,
         usagi.GAME_H - ver_h - UI.padding, gfx.COLOR_DARK_GREEN)
 
-    local x = usagi.GAME_W - SIZE * 10
-    local y = CENTER_Y
-    local scale = 8
+    local x = usagi.GAME_W - SIZE * 8
+    local y = CENTER_Y + SIZE * 4
+    local scale = 4
     gfx.sspr_ex(0, 48, 32, 32, x, y,SIZE*scale,SIZE*scale,false, false, 0, 0, 1)
 
-	if state.sat_counts[Spr.SAT_SHIELD] > 0 then
-		-- draw shield around the moon
-		gfx.sspr_ex(32, 48, 32, 32, CENTER_X - SIZE, CENTER_Y - SIZE, SIZE * 2, SIZE * 2, false, false, 0, 0, 0.5)
-	end
 end
 
 return MainMenu

@@ -38,7 +38,7 @@ function _init()
         paused = false,
         particles = {}
     }
-    Scene.switch_to(State, Scene.GAMEPLAY)
+    Scene.switch_to(State, Scene.MAIN_MENU)
 end
 
 function _update(dt)

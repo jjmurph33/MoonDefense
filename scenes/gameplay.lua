@@ -30,8 +30,8 @@ function Gameplay.update(dt, state)
 		Panel.clicked(mx, my, state)
 	end
 
-	if input.pressed(input.BTN1 or input.LEFT or input.RIGHT) then
-	    Panel.select(state)
+	if input.pressed(input.BTN1) or input.pressed(input.LEFT) or input.pressed(input.RIGHT) then
+		Panel.select(state)
 	elseif input.pressed(input.DOWN) then
 		Panel.next(state)
 	elseif input.pressed(input.UP) then
