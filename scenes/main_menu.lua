@@ -1,5 +1,8 @@
 local MainMenu = {}
 
+local MOON_X = 200
+local MOON_Y = 200
+
 local OPTION = {
     PLAY = "Play",
     CREDITS = "Credits",
@@ -15,10 +18,13 @@ end
 
 function MainMenu.init(state)
     state.current_option = 1
+    state.sats = {}
+    table.insert(state.sats, Satellite.new(Spr.SAT_TURRET))
 end
 
 function MainMenu.close(state)
     state.current_option = nil
+    state.sats = {}
 end
 
 function MainMenu.update(dt, state)
@@ -48,6 +54,19 @@ function MainMenu.update(dt, state)
             error("Unrecognized main menu option: " .. opt)
         end
     end
+
+    local sat = state.sats[1]
+   	sat.angle += 0.5 * dt
+	if sat.angle > math.pi * 2 then
+		sat.angle = 0
+	end
+	local radius = Orbits.distances[sat.orbit]
+	sat.x = MOON_X - (radius * math.cos(sat.angle)) - SIZE / 2
+	sat.y = MOON_Y - (radius * math.sin(sat.angle)) - SIZE / 2
+	sat.rotation += 1 * dt
+    if sat.rotation > math.pi * 2 then
+    	sat.rotation = 0
+    end
 end
 
 function MainMenu.draw(state)
@@ -70,11 +89,13 @@ function MainMenu.draw(state)
     gfx.text(ver, usagi.GAME_W - ver_w - UI.padding,
         usagi.GAME_H - ver_h - UI.padding, gfx.COLOR_DARK_GREEN)
 
-    local x = usagi.GAME_W - SIZE * 8
-    local y = CENTER_Y + SIZE * 4
+    local x = MOON_X - SIZE * 2
+    local y = MOON_Y - SIZE * 2
     local scale = 4
     gfx.sspr_ex(0, 48, 32, 32, x, y,SIZE*scale,SIZE*scale,false, false, 0, 0, 1)
 
+    local sat = state.sats[1]
+    Satellite.draw(sat)
 end
 
 return MainMenu
