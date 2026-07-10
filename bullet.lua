@@ -34,6 +34,7 @@ function bullet.update(dt, b, state)
             for _, e in ipairs(state.enemies) do
                 if util.point_in_rect(pos, { x = e.x, y = e.y, w = SIZE, h = SIZE }) then
                     Enemy.hit(e,b.damage)
+                    b.dead = true
                 end
             end
         else
@@ -52,6 +53,7 @@ function bullet.update(dt, b, state)
                 for _, s in ipairs(state.sats) do
                     if util.point_in_rect(pos, { x = s.x, y = s.y, w = SIZE, h = SIZE }) then
                         Satellite.hit(s,b.damage)
+                        b.dead = true
                     end
                 end
             end
@@ -68,6 +70,8 @@ function bullet.update(dt, b, state)
 end
 
 function bullet.update_missle(b,state)
+    -- tracks the nearest enemy
+    -- TODO: update this when adding enemy missiles
     local closest_distance = 50000
     local closest_index = 0
     for i, e in ipairs(state.enemies) do

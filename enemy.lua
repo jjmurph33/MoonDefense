@@ -55,20 +55,16 @@ end
 
 function enemy.draw(e)
 	gfx.spr_ex(e.sprite, e.x, e.y, false, false, e.rotation, 0, 1.0)
-	-- local x = e.x+1
-	-- local w = SIZE-1
-	-- local h = 2
-	-- local y = e.y-1-h
-	-- local color = gfx.COLOR_WHITE
-	-- gfx.rect_fill(x,y,w,h,color)
-	-- if e.health == enemy.MAX_HEALTH then
-	-- 	color = gfx.COLOR_GREEN
-	-- else
-	--     color = gfx.COLOR_RED
-	-- 	local ratio = enemy.MAX_HEALTH / e.health
-	-- 	w /= ratio
-	-- end
-	-- gfx.rect_fill(x,y,w,h,color)
+	-- draw health box if damaged
+	if e.health < enemy.MAX_HEALTH then
+	    local x = e.x+1
+		local w = SIZE-1
+		local h = 2
+		local y = e.y-1-h
+		gfx.rect_fill(x,y,w,h,gfx.COLOR_WHITE)
+		w /= (enemy.MAX_HEALTH / e.health)
+		gfx.rect_fill(x,y,w,h,gfx.COLOR_RED)
+	end
 end
 
 function enemy.hit(e,damage)

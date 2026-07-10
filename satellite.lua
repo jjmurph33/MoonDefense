@@ -9,7 +9,7 @@ function satellite.new(sprite)
 		orbit = 1
 	elseif sprite == Spr.SAT_TURRET then
 		orbit = 2
-	elseif sprite == Spr.SAT_MISSLE then
+	elseif sprite == Spr.SAT_MISSILE then
 		orbit = 3
 	end
 	return {
@@ -37,7 +37,7 @@ function satellite.update(dt, sat, state)
 
 	if sat.sprite == Spr.SAT_TURRET then
 		Satellite.update_turret(dt, sat, state)
-	elseif sat.sprite == Spr.SAT_MISSLE then
+	elseif sat.sprite == Spr.SAT_MISSILE then
 		Satellite.update_missle(dt, sat, state)
 	end
 end
@@ -63,7 +63,7 @@ function satellite.update_turret(dt, sat, state)
 		sat.rotation = math.atan(v.y, v.x)
 
 		-- extra rotation for the turret sprite
-		sat.rotation += math.pi / 2
+		--sat.rotation += math.pi / 2
 
 		if sat.fire_timer > 0 then
 			sat.fire_timer -= dt

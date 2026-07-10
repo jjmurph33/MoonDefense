@@ -13,7 +13,7 @@ function Gameplay.init(state)
 	state.sat_counts = {}
 	state.sat_counts[Spr.SAT_SHIELD]=0
 	state.sat_counts[Spr.SAT_TURRET]=0
-	state.sat_counts[Spr.SAT_MISSLE]=0
+	state.sat_counts[Spr.SAT_MISSILE]=0
 end
 
 function Gameplay.close(state)
@@ -30,18 +30,15 @@ function Gameplay.update(dt, state)
 		Panel.clicked(mx, my, state)
 	end
 
-	if input.pressed(input.BTN1) then
-	end
-
-	if input.pressed(input.BTN2) then
-		sfx.play(Sfx.CANCEL)
-		Scene.switch_to(state, Scene.MAIN_MENU)
+	if input.pressed(input.BTN1 or input.LEFT or input.RIGHT) then
+	    Panel.select(state)
+	elseif input.pressed(input.DOWN) then
+		Panel.next(state)
+	elseif input.pressed(input.UP) then
+	    Panel.prev(state)
 	end
 
 	if usagi.IS_DEV then
-		if input.key_pressed(input.KEY_MINUS) then
-			Gameplay.init(state)
-		end
 		if input.key_pressed(input.KEY_0) then
 			state.show_debug = not state.show_debug
 		end
@@ -95,8 +92,8 @@ function Gameplay.update(dt, state)
 	end
 
 	if state.health <= 0 then
-		effect.flash(1, gfx.COLOR_RED)
-		effect.screen_shake(1, 5)
+		effect.flash(2, gfx.COLOR_RED)
+		effect.screen_shake(2, 5)
 		Scene.switch_to(state, Scene.GAMEOVER)
 	end
 
@@ -151,9 +148,14 @@ function Gameplay.draw(state)
 
 	Panel.draw(state.panel,state)
 
-	-- if usagi.IS_DEV and state.show_debug then
-	-- 	gfx.text("sats: " .. #State.sats, UI.padding, usagi.GAME_H - 18, gfx.COLOR_WHITE)
-	-- end
+	if state.paused then
+		gfx.text_ex("Paused", CENTER_X - SIZE*2, CENTER_Y + SIZE * 5,2,0, gfx.COLOR_WHITE,1)
+	end
+
+	if usagi.IS_DEV and state.show_debug then
+	    local s = string.format("sats: %d enemies: %d bullets: %d health %d",#state.sats,#state.enemies,#state.bullets,state.health)
+	    gfx.text(s, UI.padding, usagi.GAME_H - 18, gfx.COLOR_WHITE)
+	end
 end
 
 return Gameplay

@@ -42,11 +42,19 @@ function _init()
 end
 
 function _update(dt)
-    if usagi.IS_DEV then
-        if input.key_pressed(input.KEY_SPACE) then
-            State.paused = not State.paused
+    -- if usagi.IS_DEV then
+    --     if input.key_pressed(input.KEY_SPACE) then
+    --         State.paused = not State.paused
+    --     end
+    -- end
+
+    if input.pressed(input.BTN2) then
+        if State.current_scene == Scene.GAMEPLAY then
+            sfx.play(Sfx.CANCEL)
+			State.paused = not State.paused
         end
-    end
+  	end
+
     if not State.paused then
         Scene.update(dt, State)
     end

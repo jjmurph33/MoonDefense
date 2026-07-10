@@ -1,8 +1,8 @@
 local Spr = {}
 
-Spr.SAT_SHIELD = 3
-Spr.SAT_TURRET = 2
-Spr.SAT_MISSLE = 4
+Spr.SAT_SHIELD = 2
+Spr.SAT_TURRET = 3
+Spr.SAT_MISSILE = 4
 
 Spr.SHIP1 = 16
 Spr.SHIP2 = 17
