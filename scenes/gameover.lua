@@ -7,10 +7,10 @@ function Gameover.close(state)
 end
 
 function Gameover.update(dt, state)
-  if input.pressed(input.BTN1) or input.pressed(input.BTN2) then
-    sfx.play(Sfx.CONFIRM)
-    Scene.switch_to(state, Scene.MAIN_MENU)
-  end
+    if input.pressed(input.BTN1) or input.pressed(input.BTN2) or input.mouse_pressed(input.MOUSE_LEFT) then
+        sfx.play(Sfx.CONFIRM)
+        Scene.switch_to(state, Scene.MAIN_MENU)
+    end
 end
 
 function Gameover.draw(state)

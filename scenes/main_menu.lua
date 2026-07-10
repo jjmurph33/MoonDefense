@@ -55,6 +55,11 @@ function MainMenu.update(dt, state)
         end
     end
 
+    if input.mouse_pressed(input.MOUSE_LEFT) then
+        sfx.play(Sfx.CONFIRM)
+        Scene.switch_to(state, Scene.GAMEPLAY)
+    end
+
     local sat = state.sats[1]
    	sat.angle += 0.5 * dt
 	if sat.angle > math.pi * 2 then
