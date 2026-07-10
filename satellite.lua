@@ -1,6 +1,6 @@
 local satellite = {}
 
-satellite.FIRE_RATE = 2 -- seconds between shots
+satellite.FIRE_RATE = 1 -- seconds between shots
 satellite.MAX_HEALTH = 10
 
 function satellite.new(sprite)
@@ -35,15 +35,24 @@ function satellite.update(dt, sat, state)
 	sat.x = CENTER_X - (radius * math.cos(sat.angle)) - SIZE / 2
 	sat.y = CENTER_Y - (radius * math.sin(sat.angle)) - SIZE / 2
 
-	if sat.sprite == Spr.SAT_TURRET then
+	if sat.sprite == Spr.SAT_SHIELD then
+	    Satellite.update_shield(dt, sat, state)
+	elseif sat.sprite == Spr.SAT_TURRET then
 		Satellite.update_turret(dt, sat, state)
 	elseif sat.sprite == Spr.SAT_MISSILE then
-		Satellite.update_missle(dt, sat, state)
+		Satellite.update_missile(dt, sat, state)
 	end
 end
 
+function satellite.update_shield(dt, sat, state)
+	local dx = CENTER_X - sat.x
+	local dy = CENTER_Y - sat.y
+	local v = util.vec_normalize({ x = dx, y = dy })
+	sat.rotation = math.atan(v.y, v.x)
+end
+
 function satellite.update_turret(dt, sat, state)
-	local closest_distance = 50000
+	local closest_distance = 20000
 	local closest_index = 0
 	for i, e in ipairs(state.enemies) do
 		if not e.dead then
@@ -62,9 +71,6 @@ function satellite.update_turret(dt, sat, state)
 		local v = util.vec_normalize({ x = dx, y = dy })
 		sat.rotation = math.atan(v.y, v.x)
 
-		-- extra rotation for the turret sprite
-		--sat.rotation += math.pi / 2
-
 		if sat.fire_timer > 0 then
 			sat.fire_timer -= dt
 		else
@@ -74,14 +80,14 @@ function satellite.update_turret(dt, sat, state)
 		end
 	else
 		sat.rotation += 0.5 * dt
-	end
-	if sat.rotation > math.pi * 2 then
-		sat.rotation = 0
+		if sat.rotation > math.pi * 2 then
+			sat.rotation = 0
+		end
 	end
 end
 
-function satellite.update_missle(dt, sat, state)
-	local closest_distance = 50000
+function satellite.update_missile(dt, sat, state)
+	local closest_distance = 30000
 	local closest_index = 0
 	for i, e in ipairs(state.enemies) do
 		if not e.dead then
@@ -104,7 +110,7 @@ function satellite.update_missle(dt, sat, state)
 		else
 			local bullet = Bullet.new(sat.x, sat.y, v.x, v.y, sat.rotation, Spr.MISSILE_BLUE, PLAYER)
 			table.insert(state.bullets, bullet)
-			sat.fire_timer = satellite.FIRE_RATE
+			sat.fire_timer = satellite.FIRE_RATE * 2
 		end
 	else
 		sat.rotation += 0.5 * dt
@@ -153,7 +159,7 @@ function satellite.hit(s,damage)
         s.dead = true
     else
         ParticleManager.explosion(s.x, s.y,1)
-        sfx.play(Sfx.EXPLOSION)
+        sfx.play(Sfx.HIT)
     end
 end
 

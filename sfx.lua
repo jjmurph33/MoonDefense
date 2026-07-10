@@ -2,10 +2,11 @@ local Sfx = {}
 
 Sfx.CONFIRM = "confirm"
 Sfx.CANCEL = "cancel"
-Sfx.EXPLOSION = "explosion"
+Sfx.HIT = "hit"
 Sfx.BUILD = "build"
-Sfx.SHIELD_HIT = "hitHurt"
+Sfx.SHIELD_HIT = "shieldhit"
 Sfx.DESTROY = "destroy"
+Sfx.DESTRUCTION = "destruction"
 
 function Sfx.play_rand_pitch(name, vol)
     vol = vol or 1.0

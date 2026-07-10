@@ -76,7 +76,7 @@ function enemy.hit(e,damage)
         State.score += 100
     else
         ParticleManager.explosion(e.x, e.y,1)
-        sfx.play(Sfx.EXPLOSION)
+        sfx.play(Sfx.HIT)
     end
 end
 

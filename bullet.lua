@@ -5,8 +5,10 @@ bullet.DAMAGE = 5
 
 function bullet.new(x, y, xvel, yvel, rotation, sprite, owner)
     local damage = bullet.DAMAGE
+    local speed = bullet.SPEED
     if sprite == Spr.MISSILE_BLUE or sprite == Spr.MISSILE_RED then
         damage *= 2
+        speed *= 2
     end
     return {
         x = x,
@@ -19,12 +21,13 @@ function bullet.new(x, y, xvel, yvel, rotation, sprite, owner)
         lifetime = 0,
         owner = owner,
         damage = damage,
+        speed=speed,
     }
 end
 
 function bullet.update(dt, b, state)
-    b.x += b.xvel * dt * bullet.SPEED
-    b.y += b.yvel * dt * bullet.SPEED
+    b.x += b.xvel * dt * b.speed
+    b.y += b.yvel * dt * b.speed
     b.lifetime += dt
 
     local pos = { x = b.x + SIZE / 2, y = b.y + SIZE / 2 }
@@ -41,7 +44,7 @@ function bullet.update(dt, b, state)
             if util.point_in_circ(pos, { x = CENTER_X, y = CENTER_Y, r = 1 }) then
                 -- hit the moon
                 if state.sat_counts[Spr.SAT_SHIELD] == 0 then
-                    sfx.play(Sfx.EXPLOSION)
+                    sfx.play(Sfx.HIT)
                     state.health -= b.damage
                 else
                     -- moon is shielded

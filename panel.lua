@@ -83,7 +83,7 @@ function panel.draw(p,state)
         end
         gfx.rect(b.x, b.y, b.w, b.h,color )
         if b.sprite == Spr.SAT_SHIELD then
-            gfx.sspr_ex(16,0,16,16, b.x + icon_x, b.y + icon_y, SIZE * 2, SIZE * 2, false, false, 0, 0, 1.0)
+            gfx.sspr_ex(16,0,16,16, b.x + icon_x, b.y + icon_y, SIZE * 2, SIZE * 2, false, false, math.pi/2, 0, 1.0)
             gfx.text("Shield", b.x + text_x, b.y + text_y, gfx.COLOR_DARK_GREEN)
         elseif b.sprite == Spr.SAT_TURRET then
             gfx.sspr_ex(32,0,16,16, b.x + icon_x, b.y + icon_y, SIZE * 2, SIZE * 2, false, false, 0, 0, 1.0)

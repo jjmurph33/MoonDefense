@@ -94,6 +94,7 @@ function Gameplay.update(dt, state)
 	if state.health <= 0 then
 		effect.flash(2, gfx.COLOR_RED)
 		effect.screen_shake(2, 5)
+		sfx.play(Sfx.DESTRUCTION)
 		Scene.switch_to(state, Scene.GAMEOVER)
 	end
 

@@ -15,9 +15,8 @@ end
 
 function Gameover.draw(state)
   gfx.clear(gfx.COLOR_BLACK)
-  gfx.text("Game Over", UI.padding, UI.padding, gfx.COLOR_DARK_GREEN)
-  local score = state.score
-  gfx.text(string.format("Final Score: %d",score), UI.padding, UI.padding * 4, gfx.COLOR_DARK_GREEN)
+  gfx.text("Game Over", CENTER_X+UI.padding*2, CENTER_Y- UI.padding*2, gfx.COLOR_DARK_GREEN)
+  gfx.text(string.format("Final Score: %d",state.score), CENTER_X, CENTER_Y, gfx.COLOR_DARK_GREEN)
 
   if math.floor(usagi.elapsed * 2) % 2 == 0 then
     gfx.text("Press " .. input.mapping_for(input.BTN1) .. " to return to Main Menu",
