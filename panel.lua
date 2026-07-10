@@ -66,7 +66,7 @@ function panel.draw(p,state)
 
     local icon_x = 5
     local icon_y = 8
-    local text_x = 45
+    local text_x = 40
     local text_y = 5
     local text_y2 = 22
 
@@ -90,7 +90,7 @@ function panel.draw(p,state)
             gfx.text("Turret", b.x + text_x, b.y + text_y, gfx.COLOR_DARK_GREEN)
         elseif b.sprite == Spr.SAT_MISSILE then
             gfx.sspr_ex(48,0,16,16, b.x + icon_x, b.y + icon_y, SIZE * 2, SIZE * 2, false, false, 0, 0, 1.0)
-            gfx.text("Missle Launcher", b.x + text_x, b.y + text_y, gfx.COLOR_DARK_GREEN)
+            gfx.text("Missile Launcher", b.x + text_x, b.y + text_y, gfx.COLOR_DARK_GREEN)
         end
         gfx.text_ex(string.format("%d/%d",count,max), b.x + text_x, b.y + text_y2, 2,0, gfx.COLOR_DARK_GREEN,1)
 
@@ -100,11 +100,11 @@ function panel.draw(p,state)
        	local y = b.y+1
 
         if count >= max then
-            gfx.rect_fill(x,y,w,h,gfx.COLOR_DARK_GRAY,0.25)
+            gfx.rect_fill(x,y,w,h,gfx.COLOR_LIGHT_GRAY,0.50)
         elseif timer > 0 then
             local ratio = panel.TIMER_MAX / timer
             w /= ratio
-       	    gfx.rect_fill(x,y,w,h,gfx.COLOR_LIGHT_GRAY,0.25)
+            gfx.rect_fill(x,y,w,h,gfx.COLOR_LIGHT_GRAY,0.33)
         end
     end
 

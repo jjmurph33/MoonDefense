@@ -67,12 +67,12 @@ function bullet.update(dt, b, state)
 
     if not b.dead then
         if b.sprite == Spr.MISSILE_BLUE or b.sprite == Spr.MISSILE_RED then
-            bullet.update_missle(b,state)
+            bullet.update_missile(b,state)
         end
     end
 end
 
-function bullet.update_missle(b,state)
+function bullet.update_missile(b,state)
     -- tracks the nearest enemy
     -- TODO: update this when adding enemy missiles
     local closest_distance = 50000
