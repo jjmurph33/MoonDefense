@@ -16,7 +16,4 @@ Built with the [Usagi Engine](https://usagiengine.com/) for [Usagi Jam 2026](htt
 
 ## Credits
 
-Sprites by Master484 (CC0):
-- https://opengameart.org/content/1616-ship-collection
-- https://opengameart.org/content/bullet-collection-1-m484
-- https://opengameart.org/content/bullet-collection-2-m484-games
+Sprites by Master484 (CC0): https://m484games.ucoz.com/
