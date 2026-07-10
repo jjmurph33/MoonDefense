@@ -106,6 +106,9 @@ function Gameplay.draw(state)
 	-- 	gfx.circ(CENTER_X, CENTER_Y, radius, gfx.COLOR_BLUE)
 	-- end
 
+    -- background
+    gfx.rect_fill(0,0,WIDTH,HEIGHT,gfx.COLOR_DARK_BLUE,0.05)
+
 	-- draw the moon
 	gfx.sspr(0, 48, 32, 32, CENTER_X - SIZE, CENTER_Y - SIZE)
 

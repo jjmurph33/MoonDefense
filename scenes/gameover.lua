@@ -15,6 +15,10 @@ end
 
 function Gameover.draw(state)
   gfx.clear(gfx.COLOR_BLACK)
+
+  -- background
+  gfx.rect_fill(0,0,usagi.GAME_W,usagi.GAME_H,gfx.COLOR_DARK_BLUE,0.05)
+
   gfx.text("Game Over", CENTER_X+UI.padding*2, CENTER_Y- UI.padding*2, gfx.COLOR_DARK_GREEN)
   gfx.text(string.format("Final Score: %d",state.score), CENTER_X, CENTER_Y, gfx.COLOR_DARK_GREEN)
 

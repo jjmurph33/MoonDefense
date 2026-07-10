@@ -76,6 +76,10 @@ end
 
 function MainMenu.draw(state)
     gfx.clear(gfx.COLOR_BLACK)
+
+    -- background
+    gfx.rect_fill(0,0,usagi.GAME_W,usagi.GAME_H,gfx.COLOR_DARK_BLUE,0.05)
+
     gfx.text("Moon Defense", UI.padding, UI.padding, gfx.COLOR_DARK_GREEN)
 
     gfx.text("Confirm: " .. input.mapping_for(input.BTN1) .. "", UI.padding, usagi.GAME_H - UI.padding * 3,
